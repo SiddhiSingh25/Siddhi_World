@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siddhi's World</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+        rel="stylesheet">
+
+<body>
+    <div class="contain">
+        <div class="left-part">
+            <div class="lftbox1">
+                <div class="logo display">
+                    <img src="White logo - no background.png" alt="">
+                </div>
+                <div class="cross"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+            <div class="lftbox2 display">
+                <div class="library display">
+                    <i class="fa-solid fa-music" style="font-size: 2rem;"></i>
+                    <p id="libraryContent">Your Library</p>
+                </div>
+
+                <div class="songslist">
+                </div>
+            </div>
+        </div>
+        <div class="right-part">
+            <div class="nav display ">
+                <div class="menu-set">
+                    <div class="menu"><i class="fa-solid fa-bars"></i></div>
+                <div  id ="alpha">
+                    <div class="search-conJs">
+                        <div class="search-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <input type="text" placeholder="Search..." class="search-input">
+                    </div>
+                    <div class="search_result">
+                        <!--<a href="" class="search-list">
+                        <div class="img-sec display"><img src="merasafar.jpg" alt=""></div>
+                        <div class="songinfo">
+                            <p class=" song songName" id="songName">Mera Safar</p>
+                            <p class=" artist songArtist" id="songArtist">Iqlipse Nova</p>
+                    </div>
+                </a>-->
+                    </div>
+                </div>
+                </div>
+                <div class="abc-box">
+                    <div class="toggle-btn">
+                        <input type="checkbox" id="checkbox">
+                        <label for="checkbox" class="toggle-label">
+                            <span class="toggle-ball"></span>
+                        </label>
+                    </div>
+                </div>
+                <!--<div class="user" id="user">
+                    <div class="user-img"><img src="profile.jpeg" alt=""></div>
+                    <div class="name">
+                        <p>Siddhi Singh</p>
+                    </div>
+                    <input type="image" src="" alt="">
+                </div>-->
+            </div>
+            <div class="playlist-sec">
+                <div class="folder-sec display">
+                    <!--Albums are load by js-->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="play-sec display">
+        <div class="container">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div class="songMenu">
+        </div>
+        <div class="icons">
+            <div><i class="fa-solid fa-music hicon" title="Auto"></i></div>
+            <div class="previous" id="previous"><i class="fa-solid fa-backward-step hicon" title="Previous"></i></div>
+            <button class="play playicon1"><i class="fa-solid fa-play playmaster hicon" title="Play"></i></button>
+            <div class="next" id="next"><i class="fa-solid fa-forward-step hicon" title="Next"></i></div>
+            <a href=""><button id="download" style="background-color: transparent;"><i style="font-size: 16px;" class="fa-solid fa-circle-down hicon" title="Download"></i></button></a>
+        </div>
+        <div class="songbar">
+            <div class="time fontcommon" id="startTime">
+                <p>00:00</p>
+            </div>
+            <div class="seekbar" id="seekbar">
+                <div class="progress" id="progress"></div>
+                <div class="thumb" id="thumb"></div>
+            </div>
+            <div class="time fontcommon" id="currentTime">
+                <p>00:00</p>
+            </div>
+        </div>
+        <div class="sound">
+            <i class="fa-solid fa-volume-high" id="volIcon" title="Volume"></i>
+            <div class="soundBar">
+                <input type="range" min="0" max="100" value="90" class="volume-seekbar" id="volumeSeekbar">
+                <div class="progressSound"></div>
+                <div class="soundThumb "></div>
+            </div>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-16esztaSRplJROstbIIdwX3N97V1+pZvV33ABoG1H2OyTttBxEGkTsoIVsiP1iaTtM8b3+hu2kB6pQ4Clr5yug==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="script.js"></script>
+</body>
+</html>
