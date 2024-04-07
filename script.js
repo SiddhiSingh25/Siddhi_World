@@ -9,7 +9,7 @@ const owner = 'SiddhiSingh25'; // Replace with the owner of the repository
 const repo = 'Siddhi_World'; // Replace with the name of the repository
 const folderPath = '/new/Bollywood/';
 //const access_token = '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';
-const access_token = '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';
+const access_token = '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';
 //Get song from New Folder url
 async function songlist(folder) {
     currentFolder = folder;
@@ -162,7 +162,7 @@ async function songlist(folder) {
                     // Parse the JSON content
                     const jsonData = JSON.parse(content);
                     // fetch img
-                    let imgurl = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${folder}/image.jpg?access_token=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`;
+                    let imgurl = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/Bollywood/image.jpg?access_token=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`;
                     cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="div" id="${folder}">
                             <div class="img">
                             <img id ="imageContainer"  src="${imgurl}" alt="">
@@ -315,7 +315,7 @@ async function songlist(folder) {
 let currentsong = new Audio();
 //let currentsong = new (window.AudioContext || window.webkitAudioContext)();
 const playaudio = (track, pause = false) => {
-    currentsong.src = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${currentFolder.split("new/")[1]}/${track}.mp3?access_token=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`;
+    currentsong.src = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${currentFolder.split("new/")[1]}/${track}.mp3?access_token=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`;
     if (!pause) {
         currentsong.play();
         playicon.innerHTML = `<i class="fa-solid fa-pause plays" title ="Pause"></i>`;
@@ -691,11 +691,4 @@ loadingAnimation.style.display = 'flex';
 setTimeout(function() {
     content.style.display = 'block';
     loadingAnimation.style.display = 'none';
-}, 4500);
-/*window.addEventListener('load', function() {
-    // Hide the loading animation
-    loadingAnimation.style.display = 'none';
-    // Show the content
-    content.style.display = 'block';
-  });*/
-// Wait for the page to fully load
+}, 4100);
