@@ -1,0 +1,16 @@
+name: My Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use the access token
+        env:
+          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}  # Accessing the secret here
+        run: |
+          echo $ACCESS_TOKEN
