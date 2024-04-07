@@ -9,7 +9,7 @@ const owner = 'SiddhiSingh25'; // Replace with the owner of the repository
 const repo = 'Siddhi_World'; // Replace with the name of the repository
 const folderPath = '/new/Bollywood/';
 //const access_token = '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';
-const access_token = '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';
+const access_token = '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';
 //Get song from New Folder url
 async function songlist(folder) {
     currentFolder = folder;
@@ -162,7 +162,7 @@ async function songlist(folder) {
                     // Parse the JSON content
                     const jsonData = JSON.parse(content);
                     // fetch img
-                    let imgurl = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/Bollywood/image.jpg?access_token=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`;
+                    let imgurl = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/Bollywood/image.jpg?access_token=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`;
                     cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="div" id="${folder}">
                             <div class="img">
                             <img id ="imageContainer"  src="${imgurl}" alt="">
@@ -315,7 +315,7 @@ async function songlist(folder) {
 let currentsong = new Audio();
 //let currentsong = new (window.AudioContext || window.webkitAudioContext)();
 const playaudio = (track, pause = false) => {
-    currentsong.src = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${currentFolder.split("new/")[1]}/${track}.mp3?access_token=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`;
+    currentsong.src = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${currentFolder.split("new/")[1]}/${track}.mp3?access_token=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`;
     if (!pause) {
         currentsong.play();
         playicon.innerHTML = `<i class="fa-solid fa-pause plays" title ="Pause"></i>`;
@@ -692,3 +692,10 @@ setTimeout(function() {
     content.style.display = 'block';
     loadingAnimation.style.display = 'none';
 }, 4100);
+/*window.addEventListener('load', function() {
+    // Hide the loading animation
+    loadingAnimation.style.display = 'none';
+    // Show the content
+    content.style.display = 'block';
+  });*/
+// Wait for the page to fully load
