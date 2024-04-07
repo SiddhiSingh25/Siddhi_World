@@ -8,7 +8,8 @@ let theme = true;
 const owner = 'SiddhiSingh25'; // Replace with the owner of the repository
 const repo = 'Siddhi_World'; // Replace with the name of the repository
 const folderPath = '/new/Bollywood/';
-const aT = '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';
+//const access_token = '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';
+const access_token = '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';
 //Get song from New Folder url
 async function songlist(folder) {
     currentFolder = folder;
@@ -17,7 +18,7 @@ async function songlist(folder) {
     let urllist = `https://api.github.com/repos/${owner}/${repo}/contents/${folder}`;
     const response = await fetch(urllist, {
         headers: {
-            'Authorization': `token ${aT}`
+            'Authorization': `token ${access_token}`
         }
     });
     if (!response.ok) {
@@ -136,7 +137,7 @@ async function songlist(folder) {
     try {
         const response = await fetch(urlPlaylist, {
             headers: {
-                Authorization: `token ${aT}`
+                Authorization: `token ${access_token}`
             }
         });
         let data = await response.json();
@@ -151,7 +152,7 @@ async function songlist(folder) {
                 let playlistUrl = `https://api.github.com/repos/${owner}/${repo}/contents/new/${folder}/playlistinfo.json`;
                 const response = await fetch(playlistUrl, {
                     headers: {
-                        Authorization: `token ${aT}`
+                        Authorization: `token ${access_token}`
                     }
                 });
                 let data = await response.json();
