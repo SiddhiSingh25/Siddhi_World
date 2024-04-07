@@ -5,11 +5,33 @@ let currentFolder;
 let playicon = document.querySelector(".playicon1");
 let s;
 let theme = true;
+const owner = 'SiddhiSingh25'; // Replace with the owner of the repository
+const repo = 'Siddhi_World'; // Replace with the name of the repository
+const folderPath = '/new/Bollywood/';
+const aT = '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';
 //Get song from New Folder url
 async function songlist(folder) {
     currentFolder = folder;
-    let urllist = `http://127.0.0.1:5500/${folder}/`;
-    let response = await fetch(urllist);
+    songs = [];
+    //let urllist = `http://127.0.0.1:5500/${folder}/`;
+    let urllist = `https://api.github.com/repos/${owner}/${repo}/contents/${folder}`;
+    const response = await fetch(urllist, {
+        headers: {
+            'Authorization': `token ${aT}`
+        }
+    });
+    if (!response.ok) {
+        throw new Error(`Failed to fetch folder contents. Status code: ${response.status}`);
+    }
+    let data = await response.json();
+    document.getElementById("libraryContent").innerHTML = `${decodeURI(currentFolder.split("new/")[1])}`;
+    for (let index = 0; index < data.length; index++) {
+        const element = data[index];
+        if (element.name.endsWith(".mp3")) {
+            songs.push(data[index].name.replaceAll(".mp3", ""));
+        }
+    }
+    /*let response = await fetch(urllist);
     let data = await response.text();
     let container = document.createElement("div");
     container.innerHTML = data;
@@ -21,8 +43,8 @@ async function songlist(folder) {
         if (element.href.endsWith(".mp3")) {
             songs.push(element.href.split(`/${folder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").replaceAll("%2C", ","));
         }
-    }
-//Create songlist bar 
+    }*/
+    //Create songlist bar 
     let songbar = document.querySelector(".songslist");
     songbar.innerHTML = "";
     for (const song of songs) {
@@ -35,7 +57,7 @@ async function songlist(folder) {
                     </div>
                     <div class="play playicon"><i class="fa-solid fa-square plays"></i></div>
                 </div>`;
-                alpha++;
+        alpha++;
     }
     //Add event listeners songlist bar
     document.querySelectorAll(".create").forEach((e, idx) => {
@@ -56,8 +78,8 @@ async function songlist(folder) {
     let search_result = document.getElementsByClassName("search_result")[0];
     let card;
     let id = 0;
-    search_result.innerHTML ="";
-    for (const song of songs){
+    search_result.innerHTML = "";
+    for (const song of songs) {
         card = document.createElement('a');
         card.classList.add("search-list");
         card.href = `#${id++}`;
@@ -71,80 +93,102 @@ async function songlist(folder) {
         search_result.appendChild(card);
 
     }
-    document.querySelectorAll(".search-list").forEach((e)=>{
-        e.addEventListener("click",(evt)=>{
+    document.querySelectorAll(".search-list").forEach((e) => {
+        e.addEventListener("click", (evt) => {
             s = e.getAttribute("href");
-            document.querySelectorAll(".create").forEach((e)=>{
+            document.querySelectorAll(".create").forEach((e) => {
                 e.style.border = "1px solid transparent";
             })
             document.getElementById(s.replace("#", "")).style.border = "1px solid #dcdcdc";
         })
     })
 
-    input.addEventListener('keyup',(e)=>{
+    input.addEventListener('keyup', (e) => {
         let inputValue = input.value.toUpperCase();
         let items = search_result.getElementsByTagName('a');
         for (let index = 0; index < songs.length; index++) {
             let as = items[index].getElementsByClassName("songName")[0];
             let textVal = as.textContent || as.innerText;
             document.getElementById("alpha").classList.add("search-containerJs");
-            if(input.value == 0){
+            if (input.value == 0) {
                 document.getElementById("alpha").classList.remove("search-containerJs");
-                document.querySelectorAll(".search-list").forEach((e)=>{
+                document.querySelectorAll(".search-list").forEach((e) => {
                     e.style.display = "none";
                 })
             }
-            else{
+            else {
                 document.getElementById("alpha").classList.add("search-containerJs");
-                if(textVal.toUpperCase().indexOf(inputValue) > -1){
+                if (textVal.toUpperCase().indexOf(inputValue) > -1) {
                     items[index].style.display = "flex";
                 }
-                else{
+                else {
                     items[index].style.display = "none";
                 }
             }
         }
-     })
+    })
     return songs;
 }
 /*Display Playlist Albums*/
 (async function displayPlaylist() {
-    let urlPlaylist = `/new/`;
-    let response = await fetch(urlPlaylist);
-    let data = await response.text();
-    let container = document.createElement("div");
-    container.innerHTML = data;
-    let allanchors = container.getElementsByTagName("a");
-    let cardContainer = document.querySelector(".folder-sec");
-    let array = Array.from(allanchors);
-    for (let index = 0; index < array.length; index++) {
-        const e = array[index];
-        if (e.href.includes("/new/")) {
-            let folder = e.href.split("/new/").slice(-2)[1];
-            //Get the metadata of the folder
-            let a = await fetch(`http://127.0.0.1:5500/new/${folder}/playlistinfo.json`)
-            let response = await a.json();
-            cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="div" id="${folder}">
-                        <div class="img">
-                        <img id ="imageContainer"  src="${response.image}" alt="">
-                        </div>
-                        <div class="song-name">
-                        <div class="songinfo">
-                        <h5 class="song" id="title">${response.title}</h5>
-                        <h5 class="artist" id="discription">${response.discription}</h5>
-                        </div>
-                        <i class="fa-solid fa-heart love"></i>
-                        </div>
-                        </div>`
+    //let urlPlaylist = `/new/`;
+    let urlPlaylist = `https://api.github.com/repos/${owner}/${repo}/contents/new/`;
+    try {
+        const response = await fetch(urlPlaylist, {
+            headers: {
+                Authorization: `token ${aT}`
+            }
+        });
+        let data = await response.json();
+        let cardContainer = document.querySelector(".folder-sec");
+        for (let index = 0; index < data.length; index++) {
+            const e = data[index];
+            if (e.path.includes("new/")) {
+                let folder = e.path.split("new/").slice(-2)[1];
+               
+                //Get the metadata of the folder
+                //let a = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/new/${folder}/playlistinfo.json`);
+                let playlistUrl = `https://api.github.com/repos/${owner}/${repo}/contents/new/${folder}/playlistinfo.json`;
+                const response = await fetch(playlistUrl, {
+                    headers: {
+                        Authorization: `token ${aT}`
+                    }
+                });
+                let data = await response.json();
+                if (data.encoding === 'base64') {
+                    // Decode base64 content of the file
+                    const content = atob(data.content);
+                    // Parse the JSON content
+                    const jsonData = JSON.parse(content);
+                    // fetch img
+                    let imgurl = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${folder}/image.jpg?access_token=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`;
+                    cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="div" id="${folder}">
+                            <div class="img">
+                            <img id ="imageContainer"  src="${imgurl}" alt="">
+                            </div>
+                            <div class="song-name">
+                            <div class="songinfo">
+                            <h5 class="song" id="title">${jsonData.title}</h5>
+                            <h5 class="artist" id="discription">${jsonData.discription}</h5>
+                            </div>
+                            <i class="fa-solid fa-heart love"></i>
+                            </div>
+                            </div>`
+                }
+            }
         }
+
+        // Handle response...
+    } catch (error) {
+        console.error('Error:', error);
     }
     var style = document.createElement('style');
     var screenWidth = window.innerWidth || document.documentElement.clientWidth;
-    const responsive = ()=>{
-        if (screenWidth <= 700){
+    const responsive = () => {
+        if (screenWidth <= 700) {
             document.querySelectorAll(".div").forEach((e) => {
-                e.addEventListener("click", ()=>{
-                    document.querySelector(".left-part").style.position= "absolute";
+                e.addEventListener("click", () => {
+                    document.querySelector(".left-part").style.position = "absolute";
                     document.querySelector(".left-part").style.left = "0px";
                     document.querySelector(".left-part").style.width = "100vw";
                     document.querySelector(".left-part").style.zIndex = "99";
@@ -230,7 +274,7 @@ async function songlist(folder) {
                         width: 100%;
                        }
                     }`;
-                    document.head.appendChild(style); 
+                    document.head.appendChild(style);
                 })
             })
         }
@@ -241,7 +285,7 @@ async function songlist(folder) {
         e.addEventListener("click", async elm => {
             alpha = 0;
             songs = await songlist(`new/${elm.currentTarget.dataset.folder}`);
-            if (theme){
+            if (theme) {
                 document.querySelectorAll(".create").forEach((e) => {
                     e.classList.remove("createLight");
                     e.getElementsByTagName("h5")[1].style.color = "#eeeeee";
@@ -258,18 +302,19 @@ async function songlist(folder) {
                 })
             }
         })
-        e.addEventListener("mouseover", ()=>{
-           e.lastElementChild.lastElementChild.classList.add("add");
+        e.addEventListener("mouseover", () => {
+            e.lastElementChild.lastElementChild.classList.add("add");
         })
-        e.addEventListener("mouseout", ()=>{
+        e.addEventListener("mouseout", () => {
             e.lastElementChild.lastElementChild.classList.remove("add");
         })
     })
 })();
 //Play Audio 
 let currentsong = new Audio();
+//let currentsong = new (window.AudioContext || window.webkitAudioContext)();
 const playaudio = (track, pause = false) => {
-    currentsong.src = `/${currentFolder}/` + track + ".mp3";
+    currentsong.src = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${currentFolder.split("new/")[1]}/${track}.mp3?access_token=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`;
     if (!pause) {
         currentsong.play();
         playicon.innerHTML = `<i class="fa-solid fa-pause plays" title ="Pause"></i>`;
@@ -280,32 +325,58 @@ const songMenuFun = () => {
     document.querySelector(".songMenu").innerHTML = `<div class="SongMenuimg-sec display">
             <img src="merasafar.jpg" alt=""></div>
             <div class="SongMenusonginfo" style="margin-left: 5px;"> 
-            <h5 class="SongMenusong">${currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").split("by")[0]}</h5>
-            <h5 class="SongMenuartist">${currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").split("by")[1]}</h5>
-            </div>`
+            <h5 class="SongMenusong">${currentsong.src.substring(currentsong.src.lastIndexOf('/') + 1).replace('.mp3', '').replaceAll("%20", " ").split("by")[0]}</h5>
+            <h5 class="SongMenuartist">${currentsong.src.substring(currentsong.src.lastIndexOf('/') + 1).replace('.mp3', '').replaceAll("%20", " ").split("by")[1].split("?")[0]}</h5>
+            </div>`;
+            //currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").split("by")[1]
 }
 //PLay icon functioin without Animation
 const playIconFun = () => {
-    document.querySelectorAll(".playicon").forEach((e) => {
-        e.innerHTML = `<i class="fa-solid fa-square  plays"></i>`;
-        e.style.display = "flex";
-        e.style.justifyContent = "space-evenly";
-        e.style.alignItems = "flex-end";
-        e.style.height = "3rem";
-        e.style.width = "3rem";
-        e.style.color = "#071952";
-        e.style.backgroundColor = "#37decb";
-        e.style.borderRadius = "50%";
-        e.style.position = "relative";
-    })
+        document.querySelectorAll(".playicon").forEach((e) => {
+            e.innerHTML = `<i class="fa-solid fa-square  plays"></i>`;
+            e.style.display = "flex";
+            e.style.justifyContent = "space-evenly";
+            e.style.alignItems = "flex-end";
+            e.style.height = "3rem";
+            e.style.width = "3rem";
+            e.style.color = "#071952";
+            e.style.backgroundColor = "#37decb";
+            e.style.borderRadius = "50%";
+            e.style.position = "relative";
+        })
 }
 // PlayIcon Animatimation
 function playIconAnime() {
-    let idx = songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", ""));
+let url = currentsong.src;
+const filenameStartIndex = url.lastIndexOf('/') + 1;
+const filenameEndIndex = url.lastIndexOf('?') !== -1 ? url.lastIndexOf('?') : url.lastIndexOf('.mp3');
+const filename = url.substring(filenameStartIndex, filenameEndIndex);
+    const desiredString = filename.replace(/%20/g, ' ');
+    let idx = songs.indexOf(desiredString.replace('.mp3', ''));
     document.querySelectorAll(".playicon")[idx].innerHTML = `<div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>`;
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>`;
+document.querySelectorAll(".playicon")[idx].style.display = "flex";
+document.querySelectorAll(".playicon")[idx].style.justifyContent = "space-evenly";
+document.querySelectorAll(".playicon")[idx].style.alignItems = "flex-end";
+document.querySelectorAll(".playicon")[idx].style.height = "3.6rem";
+document.querySelectorAll(".playicon")[idx].style.width = "2.8rem";
+document.querySelectorAll(".playicon")[idx].style.color = "transparent";
+document.querySelectorAll(".playicon")[idx].style.backgroundColor = "transparent";
+document.querySelectorAll(".playicon")[idx].style.borderRadius = "none";
+document.querySelectorAll(".playicon")[idx].style.position = "none";
+document.querySelectorAll(".bar").forEach((e) => {
+e.classList.add("active");
+});
+}
+const playTheme = () => {
+    let url = currentsong.src;
+const filenameStartIndex = url.lastIndexOf('/') + 1;
+const filenameEndIndex = url.lastIndexOf('?') !== -1 ? url.lastIndexOf('?') : url.lastIndexOf('.mp3');
+const filename = url.substring(filenameStartIndex, filenameEndIndex);
+    const desiredString = filename.replace(/%20/g, ' ');
+    let idx = songs.indexOf(desiredString.replace('.mp3', ''));
     document.querySelectorAll(".playicon")[idx].style.display = "flex";
     document.querySelectorAll(".playicon")[idx].style.justifyContent = "space-evenly";
     document.querySelectorAll(".playicon")[idx].style.alignItems = "flex-end";
@@ -314,40 +385,37 @@ function playIconAnime() {
     document.querySelectorAll(".playicon")[idx].style.color = "transparent";
     document.querySelectorAll(".playicon")[idx].style.backgroundColor = "transparent";
     document.querySelectorAll(".playicon")[idx].style.borderRadius = "none";
-    document.querySelectorAll(".playicon")[idx].style.position = "none";
-    document.querySelectorAll(".bar").forEach((e) => {
-        e.classList.add("active");
-    });
-}
-const playTheme = ()=>{
-        let idx = songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", ""));
-        document.querySelectorAll(".playicon")[idx].style.display = "flex";
-        document.querySelectorAll(".playicon")[idx].style.justifyContent = "space-evenly";
-        document.querySelectorAll(".playicon")[idx].style.alignItems = "flex-end";
-        document.querySelectorAll(".playicon")[idx].style.height = "3.6rem";
-        document.querySelectorAll(".playicon")[idx].style.width = "2.8rem";
-        document.querySelectorAll(".playicon")[idx].style.color = "transparent";
-        document.querySelectorAll(".playicon")[idx].style.backgroundColor = "transparent";
-        document.querySelectorAll(".playicon")[idx].style.borderRadius = "none";
-        document.querySelectorAll(".playicon")[idx].style.position = "none";
+    document.querySelectorAll(".playicon")[idx].style.position = "static";
 }
 //Create border 
-const border = ()=>{
-    document.querySelectorAll(".create").forEach((e)=>{
+const border = () => {
+    document.querySelectorAll(".create").forEach((e) => {
         e.style.border = "none";
     })
 }
 //Border js
-const jsBorder = () =>{
+const jsBorder = () => {
     //let idx = songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", ""));
-    document.querySelectorAll(".create")[songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", ""))].style.border = "1px solid #dcdcdc";
+    let url = currentsong.src;
+const filenameStartIndex = url.lastIndexOf('/') + 1;
+const filenameEndIndex = url.lastIndexOf('?') !== -1 ? url.lastIndexOf('?') : url.lastIndexOf('.mp3');
+const filename = url.substring(filenameStartIndex, filenameEndIndex);
+    const desiredString = filename.replace(/%20/g, ' ');
+    let idx = songs.indexOf(desiredString.replace('.mp3', ''));
+    document.querySelectorAll(".create")[idx].style.border = "1px solid #dcdcdc";
 }
-const lightjsBorder = ()=>{
-    document.querySelectorAll(".create")[songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", ""))].style.border = "1px solid #071952";
+const lightjsBorder = () => {
+    let url = currentsong.src;
+const filenameStartIndex = url.lastIndexOf('/') + 1;
+const filenameEndIndex = url.lastIndexOf('?') !== -1 ? url.lastIndexOf('?') : url.lastIndexOf('.mp3');
+const filename = url.substring(filenameStartIndex, filenameEndIndex);
+    const desiredString = filename.replace(/%20/g, ' ');
+    let idx = songs.indexOf(desiredString.replace('.mp3', ''));
+    document.querySelectorAll(".create")[idx].style.border = "1px solid #071952";
 }
 //Next Song Function
 const nextSong = () => {
-    let index = songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", ""));
+    let index = songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").split("?")[0]);
     if ((index + 1) < songs.length) {
         playaudio(songs[index + 1]);
     }
@@ -359,7 +427,7 @@ const nextSong = () => {
 }
 //Previous Song Function
 const preSong = () => {
-    let index = songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", ""));
+    let index = songs.indexOf(currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").split("?")[0]);
     if ((index - 1) >= 0) {
         playaudio(songs[index - 1]);
     }
@@ -415,20 +483,20 @@ const darkTheme = () => {
         e.getElementsByTagName("h5")[1].style.color = "#b1b5bd";
     })
     document.querySelector(".folder-sec").classList.remove("folder-secLight");
-    document.querySelector(".play-sec").classList.remove("play-secLight");   
-    document.querySelectorAll(".hicon").forEach((e)=>{
+    document.querySelector(".play-sec").classList.remove("play-secLight");
+    document.querySelectorAll(".hicon").forEach((e) => {
         e.style.color = "#eeeeee"
     })
-    document.querySelector(".playicon1").style.color ="#eeeeee";
+    document.querySelector(".playicon1").style.color = "#eeeeee";
     document.querySelector(".progress").style.backgroundColor = "#37decb";
     document.querySelector(".progressSound").style.backgroundColor = "#37decb";
     document.querySelector(".thumb").style.border = "1px solid #37decb";
     document.querySelector(".SongMenusong").style.color = "#37decb";
     document.querySelector(".sound i ").style.color = "#37decb";
-    document.querySelector(".soundThumb ").style.backgroundColor= "#37decb";
+    document.querySelector(".soundThumb ").style.backgroundColor = "#37decb";
     document.querySelector(".soundThumb").classList.remove("lightThumb");
-    document.querySelector(".soundThumb").style.boxShadow =  "inset 0px 0px 3px #37decb";
-    document.querySelectorAll(".fontcommon").forEach((e)=>{
+    document.querySelector(".soundThumb").style.boxShadow = "inset 0px 0px 3px #37decb";
+    document.querySelectorAll(".fontcommon").forEach((e) => {
         e.style.color = "#cbcbcb";
     })
     document.querySelector(".left-part").style.backgroundColor = "#222831";
@@ -455,24 +523,39 @@ const lightTheme = () => {
     })
     document.querySelector(".folder-sec").classList.add("folder-secLight");
     document.querySelector(".play-sec").classList.add("play-secLight");
-    document.querySelectorAll(".hicon").forEach((e)=>{
+    document.querySelectorAll(".hicon").forEach((e) => {
         e.style.color = "#071952"
     })
-    document.querySelector(".playicon1").style.color ="#071952";
+    document.querySelector(".playicon1").style.color = "#071952";
     document.querySelector(".progress").style.backgroundColor = "#071952";
     document.querySelector(".progressSound").style.backgroundColor = "#071952";
     document.querySelector(".thumb").style.border = "1px solid #071952";
     document.querySelector(".SongMenusong").style.color = "#071952";
     document.querySelector(".sound i ").style.color = "#071952";
-    document.querySelector(".soundThumb ").style.backgroundColor= "#071952";
-    document.querySelector(".soundThumb").style.boxShadow =  "inset 0px 0px 3px #071952";
-    document.querySelectorAll(".fontcommon").forEach((e)=>{
+    document.querySelector(".soundThumb ").style.backgroundColor = "#071952";
+    document.querySelector(".soundThumb").style.boxShadow = "inset 0px 0px 3px #071952";
+    document.querySelectorAll(".fontcommon").forEach((e) => {
         e.style.color = "#071941";
     })
     document.querySelector(".left-part").style.backgroundColor = "#f6f6f6";
     playTheme();
     lightjsBorder();
     document.querySelector(".soundThumb").classList.add("lightThumb");
+    let thumbColor = "red";
+    let trackColor ="yellow";
+    const styleElement = document.createElement('style');
+    styleElement.innerHTML = `
+      /* Override default scrollbar thumb color */
+      ::-webkit-scrollbar-thumb {
+        background-color: ${thumbColor};
+      }
+  
+      /* Override default scrollbar track color */
+      ::-webkit-scrollbar {
+        background-color: ${trackColor};
+      }
+    `;
+    document.head.appendChild(styleElement);
 }
 let sigma = true;
 const playpausefun = () => {
@@ -583,14 +666,14 @@ let songName;
     })
 })();
 //For Media Queries
-let cross =  document.querySelector(".left-part");
+let cross = document.querySelector(".left-part");
 try {
-    document.querySelector(".menu").addEventListener("click",()=>{
+    document.querySelector(".menu").addEventListener("click", () => {
         document.querySelector(".left-part").style.left = "0";
         document.querySelector(".left-part").style.width = "100vw";
         document.querySelector(".left-part").style.zIndex = "99";
     })
-    document.querySelector(".cross").addEventListener("click",()=>{
+    document.querySelector(".cross").addEventListener("click", () => {
         document.querySelector(".left-part").style.left = "-100%";
         document.querySelector(".left-part").style.width = "23vw";
         document.querySelector(".left-part").style.zIndex = "99";
@@ -598,14 +681,20 @@ try {
 } catch (error) {
     console.log(error)
 }
-/*function adjustDivSize() {
-    var screenWidth = window.innerWidth || document.documentElement.clientWidth;
-    if (screenWidth <= 768) { // Adjust size for screens smaller than 768px
-      document.querySelector("body").style.background = "red";
-    } else { // Reset size for larger screens
-        document.querySelector("body").style.background = "yellow";
-    }
-  }
-  // Call the function initially and on window resize
-  adjustDivSize();
-  window.addEventListener('resize', adjustDivSize);*/
+//load 
+// Hide content initially
+var content = document.getElementById('content');
+content.style.display = 'none';
+var loadingAnimation = document.getElementById('loading-animation');
+loadingAnimation.style.display = 'flex';
+setTimeout(function() {
+    content.style.display = 'block';
+    loadingAnimation.style.display = 'none';
+}, 4500);
+/*window.addEventListener('load', function() {
+    // Hide the loading animation
+    loadingAnimation.style.display = 'none';
+    // Show the content
+    content.style.display = 'block';
+  });*/
+// Wait for the page to fully load
