@@ -11,6 +11,6 @@ jobs:
     steps:
       - name: Use the access token
         env:
-          ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}  # Accessing the secret here
+          ACCESS_TOKEN: ${{ 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 }}  # Accessing the secret here
         run: |
           echo $ACCESS_TOKEN
