@@ -50,7 +50,7 @@ async function songlist(folder) {
     songbar.innerHTML = "";
     for (const song of songs) {
         songbar.innerHTML = songbar.innerHTML + `<div class="create" id=${alpha}>
-                    <div class="img-sec display"><img src="merasafar.jpg" alt=""></div>
+                    <div class="img-sec display"><img src="Cover.png" alt=""></div>
                     <div class="songinfo" style="margin-left: 5px;">
                     <h5 style="display:none;">${song}</h5>  
                     <h5 class="song size">${song.split("by")[0]}</h5>
@@ -86,7 +86,7 @@ async function songlist(folder) {
         card.href = `#${id++}`;
         user.push(card);
         card.insertAdjacentHTML('afterbegin',
-            `<div class="img-sec display"><img src="merasafar.jpg" alt=""></div>
+            `<div class="img-sec display"><img src="Cover.png" alt=""></div>
             <div class="songinfo">
                 <p class=" song songName" id="songName">${song.split("by")[0]}</p>
                 <p class=" artist songArtist" id="songArtist">${song.split("by")[1]}</p>
