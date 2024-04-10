@@ -8,7 +8,7 @@ let theme = true;
 const owner = 'SiddhiSingh25';
 const repo = 'Siddhi_World';
 const folderPath = '/new/Bollywood/';//Default playlist
-//const access_token = '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';
+const access_token = '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';
 //Get song from github repo (Folder) url
 async function songlist(folder) {
     currentFolder = folder;
