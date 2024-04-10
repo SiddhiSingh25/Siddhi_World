@@ -1,16 +1,15 @@
 let songs;
-let user = [];
-let alpha = 0;
-let currentFolder;
-let playicon = document.querySelector(".playicon1");
-let s;
+let user = []; // SEARCH Card Container Array
+let alpha = 0; // Variable to get id of search card
+let currentFolder; 
+let playicon = document.querySelector(".playicon1");//Pause Button on music controller
+let s; // Search list href
 let theme = true;
-const owner = 'SiddhiSingh25'; // Replace with the owner of the repository
-const repo = 'Siddhi_World'; // Replace with the name of the repository
-const folderPath = '/new/Bollywood/';
-//const access_token = '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';
-//const access_token = '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';
-//Get song from New Folder url
+const owner = 'SiddhiSingh25';
+const repo = 'Siddhi_World';
+const folderPath = '/new/Bollywood/';//Default playlist
+//const access_token = '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';
+//Get song from github repo (Folder) url
 async function songlist(folder) {
     currentFolder = folder;
     songs = [];
@@ -32,19 +31,6 @@ async function songlist(folder) {
             songs.push(data[index].name.replaceAll(".mp3", ""));
         }
     }
-    /*let response = await fetch(urllist);
-    let data = await response.text();
-    let container = document.createElement("div");
-    container.innerHTML = data;
-    let a = container.getElementsByTagName("a");
-    songs = [];
-    document.getElementById("libraryContent").innerHTML = `${decodeURI(currentFolder.split("new/")[1])}`;
-    for (let index = 0; index < a.length; index++) {
-        const element = a[index];
-        if (element.href.endsWith(".mp3")) {
-            songs.push(element.href.split(`/${folder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").replaceAll("%2C", ","));
-        }
-    }*/
     //Create songlist bar 
     let songbar = document.querySelector(".songslist");
     songbar.innerHTML = "";
@@ -103,7 +89,6 @@ async function songlist(folder) {
             document.getElementById(s.replace("#", "")).style.border = "1px solid #dcdcdc";
         })
     })
-
     input.addEventListener('keyup', (e) => {
         let inputValue = input.value.toUpperCase();
         let items = search_result.getElementsByTagName('a');
@@ -132,7 +117,6 @@ async function songlist(folder) {
 }
 /*Display Playlist Albums*/
 (async function displayPlaylist() {
-    //let urlPlaylist = `/new/`;
     let urlPlaylist = `https://api.github.com/repos/${owner}/${repo}/contents/new/`;
     try {
         const response = await fetch(urlPlaylist, {
@@ -146,9 +130,7 @@ async function songlist(folder) {
             const e = data[index];
             if (e.path.includes("new/")) {
                 let folder = e.path.split("new/").slice(-2)[1];
-               
-                //Get the metadata of the folder
-                //let a = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/new/${folder}/playlistinfo.json`);
+                //Get the JSON data of the folder
                 let playlistUrl = `https://api.github.com/repos/${owner}/${repo}/contents/new/${folder}/playlistinfo.json`;
                 const response = await fetch(playlistUrl, {
                     headers: {
@@ -162,7 +144,7 @@ async function songlist(folder) {
                     // Parse the JSON content
                     const jsonData = JSON.parse(content);
                     // fetch img
-                    let imgurl = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/Bollywood/image.jpg?access_token=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`;
+                    let imgurl = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${folder}/image.jpg?access_token=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`;
                     cardContainer.innerHTML = cardContainer.innerHTML + `<div data-folder="${folder}" class="div" id="${folder}">
                             <div class="img">
                             <img id ="imageContainer"  src="${imgurl}" alt="">
@@ -172,9 +154,9 @@ async function songlist(folder) {
                             <h5 class="song" id="title">${jsonData.title}</h5>
                             <h5 class="artist" id="discription">${jsonData.discription}</h5>
                             </div>
-                            <i class="fa-solid fa-heart love"></i>
+                            <i class="fa-solid fa-heart love" style="color :#3ccebd"></i>
                             </div>
-                            </div>`
+                            </div>`                            
                 }
             }
         }
@@ -183,6 +165,7 @@ async function songlist(folder) {
     } catch (error) {
         console.error('Error:', error);
     }
+    //FOR RESPONIVE
     var style = document.createElement('style');
     var screenWidth = window.innerWidth || document.documentElement.clientWidth;
     const responsive = () => {
@@ -313,7 +296,6 @@ async function songlist(folder) {
 })();
 //Play Audio 
 let currentsong = new Audio();
-//let currentsong = new (window.AudioContext || window.webkitAudioContext)();
 const playaudio = (track, pause = false) => {
     currentsong.src = `https://raw.githubusercontent.com/SiddhiSingh25/Siddhi_world/main/new/${currentFolder.split("new/")[1]}/${track}.mp3?access_token=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`;
     if (!pause) {
@@ -324,12 +306,11 @@ const playaudio = (track, pause = false) => {
 //Song Menu Bar
 const songMenuFun = () => {
     document.querySelector(".songMenu").innerHTML = `<div class="SongMenuimg-sec display">
-            <img src="merasafar.jpg" alt=""></div>
+            <img src="Cover.png" alt=""></div>
             <div class="SongMenusonginfo" style="margin-left: 5px;"> 
             <h5 class="SongMenusong">${currentsong.src.substring(currentsong.src.lastIndexOf('/') + 1).replace('.mp3', '').replaceAll("%20", " ").split("by")[0]}</h5>
             <h5 class="SongMenuartist">${currentsong.src.substring(currentsong.src.lastIndexOf('/') + 1).replace('.mp3', '').replaceAll("%20", " ").split("by")[1].split("?")[0]}</h5>
             </div>`;
-            //currentsong.src.split(`/${currentFolder}/`)[1].replaceAll("%20", " ").replaceAll(".mp3", "").split("by")[1]
 }
 //PLay icon functioin without Animation
 const playIconFun = () => {
@@ -500,7 +481,7 @@ const darkTheme = () => {
     document.querySelectorAll(".fontcommon").forEach((e) => {
         e.style.color = "#cbcbcb";
     })
-    document.querySelector(".left-part").style.backgroundColor = "#222831";
+    document.querySelector(".left-part").style.backgroundColor = "#0a0a0a";
     playTheme();
     jsBorder();
 }
@@ -542,21 +523,6 @@ const lightTheme = () => {
     playTheme();
     lightjsBorder();
     document.querySelector(".soundThumb").classList.add("lightThumb");
-    let thumbColor = "red";
-    let trackColor ="yellow";
-    const styleElement = document.createElement('style');
-    styleElement.innerHTML = `
-      /* Override default scrollbar thumb color */
-      ::-webkit-scrollbar-thumb {
-        background-color: ${thumbColor};
-      }
-  
-      /* Override default scrollbar track color */
-      ::-webkit-scrollbar {
-        background-color: ${trackColor};
-      }
-    `;
-    document.head.appendChild(styleElement);
 }
 let sigma = true;
 const playpausefun = () => {
@@ -599,7 +565,8 @@ let songName;
     playaudio(songs[0], true);
     songMenuFun();
     playicon.addEventListener("click", playpausefun);
-    //Time update and control seekbar 
+
+//Time update and control seekbar 
     const seekbar = document.getElementById('seekbar');
     const progress = document.getElementById('progress');
     const thumb = document.getElementById('thumb');
@@ -691,11 +658,5 @@ loadingAnimation.style.display = 'flex';
 setTimeout(function() {
     content.style.display = 'block';
     loadingAnimation.style.display = 'none';
-}, 4100);
-/*window.addEventListener('load', function() {
-    // Hide the loading animation
-    loadingAnimation.style.display = 'none';
-    // Show the content
-    content.style.display = 'block';
-  });*/
-// Wait for the page to fully load
+}, 4000);
+
